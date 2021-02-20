@@ -1,5 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_node_employee/models/employee.dart';
 import 'package:flutter_node_employee/screens/mydrawer.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'dart:async';
+Future<Employee>sendData(String apiLink,{Map body})async{
+  return http.post(apiLink,body:body).then((http.Response response){
+    print(response.body);
+    return json.decode(response.body);
+  });
+}
+
+
 
 class CheckApp extends StatefulWidget {
   @override
@@ -7,14 +19,14 @@ class CheckApp extends StatefulWidget {
 }
 
 class _CheckAppState extends State<CheckApp> {
-  TextEditingController getEmployeename=TextEditingController();
-  TextEditingController getAddress=TextEditingController();
-  TextEditingController getPhoneno=TextEditingController();
-  TextEditingController getDesignation=TextEditingController();
-  TextEditingController getEmail=TextEditingController();
-  TextEditingController getEmpsalary=TextEditingController();
-  TextEditingController getCname=TextEditingController();
-  TextEditingController getEmployeecode=TextEditingController();
+  TextEditingController Employeename=TextEditingController();
+  TextEditingController Address=TextEditingController();
+  TextEditingController Phoneno=TextEditingController();
+  TextEditingController Designation=TextEditingController();
+  TextEditingController Email=TextEditingController();
+  TextEditingController Empsalary=TextEditingController();
+  TextEditingController Cname=TextEditingController();
+  TextEditingController Employeecode=TextEditingController();
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -34,7 +46,7 @@ class _CheckAppState extends State<CheckApp> {
               children: [
 
                 TextField(
-                  controller: getEmployeename,
+                  controller: Employeename,
                   decoration: InputDecoration(
                       hintText: "empname",
                       border: OutlineInputBorder()
@@ -42,7 +54,7 @@ class _CheckAppState extends State<CheckApp> {
                 ),
                 SizedBox(height: 10.0,),
                 TextField(
-                  controller: getAddress,
+                  controller: Address,
                   decoration: InputDecoration(
                       hintText: "address",
                       border: OutlineInputBorder()
@@ -50,14 +62,14 @@ class _CheckAppState extends State<CheckApp> {
                 ),
                 SizedBox(height: 10.0,),
                 TextField(
-                  controller: getPhoneno,
+                  controller: Phoneno,
                   decoration: InputDecoration(
                       hintText: "phoneno",
                       border: OutlineInputBorder()
                   ),
                 ),SizedBox(height: 10.0,),
                 TextField(
-                  controller: getDesignation,
+                  controller: Designation,
                   decoration: InputDecoration(
                       hintText: "designation",
                       border: OutlineInputBorder()
@@ -65,7 +77,7 @@ class _CheckAppState extends State<CheckApp> {
                 ),
                 SizedBox(height: 10.0,),
                 TextField(
-                  controller: getEmail,
+                  controller: Email,
                   decoration: InputDecoration(
                       hintText: "email",
                       border: OutlineInputBorder()
@@ -73,7 +85,7 @@ class _CheckAppState extends State<CheckApp> {
                 ),
                 SizedBox(height: 10.0,),
                 TextField(
-                  controller: getEmpsalary,
+                  controller: Empsalary,
                   decoration: InputDecoration(
                       hintText: "salary",
                       border: OutlineInputBorder()
@@ -81,7 +93,7 @@ class _CheckAppState extends State<CheckApp> {
                 ),
                 SizedBox(height: 10.0,),
                 TextField(
-                  controller: getCname,
+                  controller: Cname,
                   decoration: InputDecoration(
                       hintText: "companyname",
                       border: OutlineInputBorder()
@@ -89,30 +101,33 @@ class _CheckAppState extends State<CheckApp> {
                 ),
                 SizedBox(height: 10.0,),
                 TextField(
-                  controller: getEmployeecode,
+                  controller: Employeecode,
                   decoration: InputDecoration(
                       hintText: "empcode",
                       border: OutlineInputBorder()
                   ),
                 ),
                 SizedBox(height: 10.0,),
-                RaisedButton(onPressed: (){
-                  String getEname=getEmployeename.text;
-                  String getEaddress=getAddress.text;
-                  String getEphone=getPhoneno.text;
-                  String getEdesig=getDesignation.text;
-                  String getEemail=getEmail.text;
-                  String getEsalary=getEmpsalary.text;
-                  String getCompanyname=getCname.text;
-                  String getEcode=getEmployeecode.text;
-                  print(getEname);
-                  print(getEaddress);
-                  print(getEphone);
-                  print(getEdesig);
-                  print(getEemail);
-                  print(getEsalary);
-                  print(getCompanyname);
-                  print(getEcode);
+                RaisedButton(onPressed: () async {
+                  var getEname=Employeename.text;
+                  var getEaddress=Address.text;
+                  var getEphone=Phoneno.text;
+                  var getEdesig=Designation.text;
+                  var getEemail=Email.text;
+                  var getEsalary=Empsalary.text;
+                  var getCompanyname=Cname.text;
+                  var getEcode=Employeecode.text;
+                  Employee empdata=new Employee(
+                    empname: getEname,
+                    address: getEaddress,
+                    phoneno: getEphone,
+                    designation: getEdesig,
+                    email: getEemail,
+                    salary: getEsalary,
+                    companyname: getCompanyname,
+                    empcode: getEcode
+                  );
+                  Employee datatosend=await sendData("https://nodejsemployee.herokuapp.com/empadd",body: empdata.toJson());
 
                 },
                   color: Colors.green,

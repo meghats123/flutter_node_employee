@@ -16,6 +16,7 @@ class MyApp extends StatelessWidget {
         ),
 
         drawer: MyDrawer(),
+        body: Container(),
 
       ),
     );
